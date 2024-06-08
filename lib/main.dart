@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: <Widget>[
                   Image.file(_image!),
                   const SizedBox(height: 20),
-                  const Text('Please Wait! Loading Classification Results:'),
+                  const Text('Please Wait !'),
                   const SizedBox(height: 10),
                   _outputLabels.isEmpty
                       ? const CircularProgressIndicator()
