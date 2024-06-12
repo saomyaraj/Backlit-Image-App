@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tflite_flutter_plus/tflite_flutter_plus.dart'; // Use tflite_flutter_plus instead of tflite_flutter
-import 'package:tflite_flutter_helper_plus/tflite_flutter_helper_plus.dart'; // Ensure helper package matches
+import 'package:tflite_flutter_plus/tflite_flutter_plus.dart';
+import 'package:tflite_flutter_helper_plus/tflite_flutter_helper_plus.dart';
 import 'package:image/image.dart' as img;
 
 void main() {
@@ -51,10 +51,9 @@ class _MyHomePageState extends State<MyHomePage> {
       var inputShape = _interpreter.getInputTensor(0).shape;
       var outputShape = _interpreter.getOutputTensor(0).shape;
 
-      _inputImage = TensorImage(
-          TfLiteType.uint8); // Use TfLiteType from tflite_flutter_plus
-      _outputBuffer = TensorBuffer.createFixedSize(outputShape,
-          TfLiteType.float32); // Use TfLiteType from tflite_flutter_plus
+      _inputImage = TensorImage(TfLiteType.uint8);
+      _outputBuffer =
+          TensorBuffer.createFixedSize(outputShape, TfLiteType.float32);
     } catch (e) {
       if (kDebugMode) {
         print('Error loading model: $e');
