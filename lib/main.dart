@@ -60,17 +60,15 @@ class _ImageProcessorPageState extends State<ImageProcessorPage> {
         print('Attempting to load model...');
       }
       _interpreter = await Interpreter.fromAsset('assets/unet_model.tflite');
-
-      // Set input shape
-      var inputShape = [1, 3, 256, 256];
-      _interpreter!.resizeInputTensor(0, inputShape);
-      _interpreter!.allocateTensors();
-
       _isModelLoaded = true;
       if (kDebugMode) {
         print('Model loaded successfully');
-        print('Input shape: ${_interpreter!.getInputTensor(0).shape}');
-        print('Output shape: ${_interpreter!.getOutputTensor(0).shape}');
+      }
+      if (kDebugMode) {
+        print('Input shape: ${_interpreter?.getInputTensor(0).shape}');
+      }
+      if (kDebugMode) {
+        print('Output shape: ${_interpreter?.getOutputTensor(0).shape}');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -161,9 +159,12 @@ class _ImageProcessorPageState extends State<ImageProcessorPage> {
       for (int y = 0; y < 256; y++) {
         for (int x = 0; x < 256; x++) {
           var pixel = image.getPixel(x, y);
-          inputImage[y * 256 * 3 + x * 3 + 0] = img.getRed(pixel) / 255.0;
-          inputImage[y * 256 * 3 + x * 3 + 1] = img.getGreen(pixel) / 255.0;
-          inputImage[y * 256 * 3 + x * 3 + 2] = img.getBlue(pixel) / 255.0;
+          inputImage[(0 * 256 * 256) + (y * 256) + x] =
+              img.getRed(pixel) / 255.0;
+          inputImage[(1 * 256 * 256) + (y * 256) + x] =
+              img.getGreen(pixel) / 255.0;
+          inputImage[(2 * 256 * 256) + (y * 256) + x] =
+              img.getBlue(pixel) / 255.0;
         }
       }
 
@@ -206,10 +207,10 @@ extension ReshapeExtension on Float32List {
     }
 
     return [
-      List.generate(shape[1], (y) {
-        return List.generate(shape[2], (x) {
-          return List.generate(shape[3], (c) {
-            return this[(y * shape[2] * shape[3]) + (x * shape[3]) + c]
+      List.generate(shape[1], (c) {
+        return List.generate(shape[2], (y) {
+          return List.generate(shape[3], (x) {
+            return this[(c * shape[2] * shape[3]) + (y * shape[3]) + x]
                 .toDouble();
           });
         });
